@@ -1,0 +1,63 @@
+{
+  "working_dir": "./nano_graphrag_cache",
+  "complexity_classifier_path": "nano_graphrag/models/modernbert_complexity_classifier",
+  "enable_cache": true,
+  "cache_dir": "./nano_graphrag_cache/lru_cache",
+  "enable_feedback": true,
+  "feedback_dir": "./nano_graphrag_cache/feedback",
+  "enable_deduplication": true,
+  "temperature_scaling": 1.0,
+  "api_type": "dashscope",
+  "answer_generator_config": {
+    "model_name": "qwen-turbo",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_tokens": 1500,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "system_prompt": "你是一个专业、准确、公正的问答助手。请基于给定的上下文回答问题，如果上下文中没有相关信息，请直接说明无法回答。"
+  },
+  "retrieval_config": {
+    "naive": {
+      "enabled": true,
+      "base_weight": 0.25,
+      "vector_top_k": 10
+    },
+    "bm25": {
+      "enabled": true,
+      "base_weight": 0.25,
+      "top_k": 10
+    },
+    "local": {
+      "enabled": true,
+      "base_weight": 0.25,
+      "max_hops": 2,
+      "top_k": 10
+    },
+    "global": {
+      "enabled": true,
+      "base_weight": 0.25,
+      "max_hops": 2,
+      "top_k": 10
+    }
+  },
+  "fusion_config": {
+    "strategy": "adaptive",
+    "min_weight": 0.01,
+    "confidence_thresholds": {
+      "high": 0.8,
+      "medium": 0.6,
+      "low": 0.4
+    },
+    "complexity_weights": {
+      "zero_hop": {"naive": 0.1, "bm25": 0.1, "local": 0.1, "global": 0.1, "llm_only": 0.6},
+      "one_hop": {"naive": 0.25, "bm25": 0.25, "local": 0.25, "global": 0.25, "llm_only": 0.0},
+      "multi_hop": {"naive": 0.1, "bm25": 0.1, "local": 0.4, "global": 0.4, "llm_only": 0.0}
+    }
+  },
+  "deduplication_config": {
+    "threshold": 0.85,
+    "algorithm": "cosine",
+    "min_content_length": 50
+  }
+} 
