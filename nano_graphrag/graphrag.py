@@ -7,11 +7,9 @@ import os
 import asyncio
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
-from functools import partial
 from typing import Type, Union, List, Dict, Any, Optional, Callable
 
 import tiktoken
-import torch
 
 from ._utils import (
     logger,
@@ -58,25 +56,12 @@ from ._llm import (
     siliconflow_embedding,
 )
 
-# 新增的高级模块（保留现代评估与简单优化器）
-create_enhanced_fusion = None
-create_enhanced_fusion_config = None
-EnhancedFusionConfig = None
-create_confidence_aware_attention_fusion = None
-create_confidence_aware_attention_config = None
-ConfidenceAwareAttentionConfig = None
-
-
 from .complexity.router import ComplexityAwareRouter
-from .fusion import FiT5FusionEngine, FiT5Config, create_fit5_fusion_engine
+from .retrieval import ConfidenceAwareFusion, FusionConfig, create_fusion_engine
 
 
 @dataclass
 class EnhancedGraphRAG:
-    """
-    增强版GraphRAG系统
-    集成了复杂度感知路由、传统融合与现代评估等模块
-    """
     
     # 基础配置
     working_dir: str = field(
@@ -160,11 +145,11 @@ class EnhancedGraphRAG:
     enable_modern_evaluator: bool = True  # 启用现代评估器
     evaluator_config: Optional[Dict[str, Any]] = None  # 评估器配置
 
-    # FiT5融合引擎配置（基于OpenMatch/FiT5官方代码库）
-    fit5_config: Optional[FiT5Config] = None  # FiT5融合引擎配置
-    enable_fit5_fusion: bool = True  # 是否启用FiT5融合
-    fit5_model_name: str = "t5-base"  # FiT5基础模型
-    fit5_fusion_method: str = "listwise"  # FiT5融合方法: listwise, pointwise
+    # RRF置信度感知融合配置
+    fusion_config: Optional[FusionConfig] = None  # RRF融合配置
+    enable_confidence_fusion: bool = True  # 是否启用置信度感知融合
+    rrf_k: float = 60.0  # RRF平滑参数
+    fusion_max_results: int = 20  # 融合最大结果数
     
     # 渐进式检索配置
     confidence_high_threshold: float = 0.9  # 高置信度阈值（策略A）
@@ -192,7 +177,7 @@ class EnhancedGraphRAG:
     model_path: str = field(default_factory=lambda: "nano_graphrag/models/modernbert_complexity_classifier")
 
     def __post_init__(self):
-        """初始化增强版GraphRAG系统"""
+
         _print_config = ",\n  ".join([f"{k} = {v}" for k, v in asdict(self).items()])
         logger.debug(f"Enhanced GraphRAG init with param:\n\n  {_print_config}\n")
 
@@ -334,8 +319,9 @@ class EnhancedGraphRAG:
     def _setup_enhanced_modules(self):
         """设置增强功能模块"""
         try:
-
-            logger.info(f"Using traditional fusion strategy: {self.fusion_strategy}")
+            # 设置默认融合策略
+            fusion_strategy = "fit5" if self.enable_fit5_fusion else "traditional"
+            logger.info(f"Using fusion strategy: {fusion_strategy}")
             
             # Modern Evaluator 初始化
             if self.enable_modern_evaluator:
@@ -368,28 +354,26 @@ class EnhancedGraphRAG:
             self.router = self.complexity_router
             logger.info("Complexity Router initialized successfully")
             
-            # FiT5融合引擎初始化（基于OpenMatch/FiT5官方代码库）
-            if self.enable_fit5_fusion:
-                if self.fit5_config is None:
-                    self.fit5_config = FiT5Config(
-                        model_name=self.fit5_model_name,
-                        device="auto",
-                        fusion_method=self.fit5_fusion_method
+            # RRF置信度感知融合引擎初始化
+            if self.enable_confidence_fusion:
+                if self.fusion_config is None:
+                    self.fusion_config = FusionConfig(
+                        k=self.rrf_k,
+                        max_results=self.fusion_max_results,
+                        confidence_aware=True
                     )
                 
-                self.fusion_engine = create_fit5_fusion_engine(
-                    model_name=self.fit5_config.model_name,
-                    device=self.fit5_config.device,
-                    fusion_method=self.fit5_config.fusion_method,
-                    max_length=self.fit5_config.max_length,
-                    batch_size=self.fit5_config.batch_size
+                self.fusion_engine = create_fusion_engine(
+                    k=self.fusion_config.k,
+                    max_results=self.fusion_config.max_results,
+                    confidence_aware=self.fusion_config.confidence_aware
                 )
-                logger.info("✅ FiT5融合引擎初始化成功（基于OpenMatch/FiT5）")
-                logger.info(f"FiT5模型: {self.fit5_config.model_name}")
-                logger.info(f"融合方法: {self.fit5_config.fusion_method}")
+                logger.info("✅ RRF置信度感知融合引擎初始化成功")
+                logger.info(f"RRF参数k: {self.fusion_config.k}")
+                logger.info(f"最大结果数: {self.fusion_config.max_results}")
             else:
                 self.fusion_engine = None
-                logger.info("FiT5融合引擎已禁用")
+                logger.info("RRF融合引擎已禁用")
             
         except Exception as e:
             logger.warning(f"Failed to initialize enhanced modules: {e}")
@@ -456,7 +440,7 @@ class EnhancedGraphRAG:
                 logger.info(f"单一检索模式完成: {mode}")
             else:
                 # 多检索结果，需要融合
-                response = await self._fit5_fusion(retrieval_results, complexity_result, query, param)
+                response = await self._confidence_aware_fusion(retrieval_results, complexity_result, query, param)
                 logger.info(f"多检索模式融合完成: {list(retrieval_results.keys())}")
             
             await self._query_done()
@@ -756,7 +740,8 @@ class EnhancedGraphRAG:
             
             # 添加融合引擎统计
             if hasattr(self, 'fusion_engine') and self.fusion_engine:
-                stats["fusion_engine_info"] = self.fusion_engine.get_model_info()
+                stats["fusion_stats"] = self.fusion_engine.get_fusion_stats()
+                stats["fusion_engine_type"] = "RRF_ConfidenceAware"
         
         return stats
 
@@ -939,16 +924,17 @@ class EnhancedGraphRAG:
             from .answer_generation.prompts import PROMPTS
             return PROMPTS["fail_response"]
     
-    async def _fit5_fusion(self, retrieval_results: Dict[str, Any], complexity_result: Dict[str, Any], query: str, param: QueryParam) -> str:
+    async def _confidence_aware_fusion(self, retrieval_results: Dict[str, Any], complexity_result: Dict[str, Any], query: str, param: QueryParam) -> str:
         """
-        FiT5融合方法 - 基于OpenMatch/FiT5官方代码库的真实实现
+        置信度感知的多源检索融合方法
         
-        使用基于真实OpenMatch/FiT5的融合引擎将多个检索器的结果进行智能重排序和融合
+        使用RRF(Reciprocal Rank Fusion)算法和置信度感知权重调整，
+        将多个检索器的结果进行智能重排序和融合。
         
-        参考资源：
-        - 论文: Fusion-in-T5: Unifying Document Ranking Signals for Improved Information Retrieval
-        - GitHub: https://github.com/OpenMatch/FiT5
-        - 团队: OpenMatch
+        核心特性：
+        - RRF排序融合：基于排名而非分数进行融合，避免不同检索器分数不可比的问题
+        - 置信度感知：根据查询复杂度动态调整各检索源的权重
+        - 多样性保证：确保融合结果来源多样化
         
         Args:
             retrieval_results: 检索结果字典 {retriever_name: List[RetrievalResult] or str}
@@ -960,16 +946,16 @@ class EnhancedGraphRAG:
             融合后的响应字符串
         """
         try:
-            logger.info("使用FiT5融合引擎")
+            logger.info("使用RRF置信度感知融合引擎")
             
-            # 检查是否启用FiT5融合引擎
-            if not self.enable_fit5_fusion or self.fusion_engine is None:
-                logger.warning("FiT5融合引擎未启用，回退到简单融合")
+            # 检查是否启用置信度感知融合引擎
+            if not self.enable_confidence_fusion or self.fusion_engine is None:
+                logger.warning("RRF融合引擎未启用，回退到简单融合")
                 return await self._fallback_fusion_strategy(retrieval_results, query, param)
             
-            # 过滤和转换检索结果为统一格式
+            # 将检索结果转换为按源分组的RetrievalResult列表
             from .retrieval.alignment import RetrievalResult
-            processed_results = {}
+            results_by_source = {}
             
             for retriever_name, result in retrieval_results.items():
                 if not result:
@@ -984,65 +970,87 @@ class EnhancedGraphRAG:
                         continue
                     else:
                         # 其他字符串结果转换为RetrievalResult
-                        converted_result = RetrievalResult(
-                            content=result,
-                            score=0.8,  # 默认分数
-                            source=retriever_name,
-                            chunk_id=f"{retriever_name}_context",
-                            metadata={"converted_from_string": True}
-                        )
-                        processed_results[retriever_name] = [converted_result]
+                        # 尝试按段落分割字符串结果以增加粒度
+                        content_parts = []
+                        if "--New Chunk--" in result:
+                            content_parts = [s.strip() for s in result.split("--New Chunk--") if s.strip()]
+                        elif "-----" in result and "```csv" in result:
+                            # 处理图检索结果格式
+                            parts = result.split("-----")
+                            for part in parts:
+                                if "```csv" in part:
+                                    csv_start = part.find("```csv\n") + 7
+                                    csv_end = part.find("\n```")
+                                    if csv_start != -1 and csv_end != -1:
+                                        csv_content = part[csv_start:csv_end].strip()
+                                        if csv_content:
+                                            content_parts.append(csv_content)
+                        else:
+                            content_parts = [result.strip()]
+                        
+                        retrieval_results_list = []
+                        for i, content in enumerate(content_parts):
+                            if content and len(content.strip()) > 10:
+                                converted_result = RetrievalResult(
+                                    content=content,
+                                    score=1.0 - (i * 0.1),  # 递减分数
+                                    source=retriever_name,
+                                    chunk_id=f"{retriever_name}_part_{i}",
+                                    rank=i + 1,
+                                    metadata={"converted_from_string": True}
+                                )
+                                retrieval_results_list.append(converted_result)
+                        results_by_source[retriever_name] = retrieval_results_list
                 
                 elif isinstance(result, list) and all(isinstance(r, RetrievalResult) for r in result):
                     # 已经是RetrievalResult列表
-                    processed_results[retriever_name] = result
+                    results_by_source[retriever_name] = result
                 
                 else:
                     logger.warning(f"未知的结果格式来自 {retriever_name}: {type(result)}")
                     continue
             
-            if not processed_results:
+            if not results_by_source:
                 logger.warning("没有有效的检索结果可供融合")
                 from .answer_generation.prompts import PROMPTS
                 return PROMPTS["fail_response"]
             
-            # 使用FiT5融合引擎进行智能融合
-            fused_results = await self.fusion_engine.fuse_retrieval_results(
-                query=query,
-                retrieval_results=processed_results,
-                max_results=param.top_k if hasattr(param, 'top_k') else 5
+            # 使用RRF融合引擎进行智能融合
+            fused_results = self.fusion_engine.fuse_results(
+                results_by_source=results_by_source,
+                query_complexity=complexity_result
             )
             
             if not fused_results:
-                logger.warning("融合引擎返回空结果")
+                logger.warning("RRF融合引擎返回空结果")
                 from .answer_generation.prompts import PROMPTS
                 return PROMPTS["fail_response"]
             
             # 将融合结果转换为上下文并生成答案
-            response = await self._generate_answer_from_fused_results(fused_results, query, param, complexity_result)
+            response = await self._generate_answer_from_rrf_results(fused_results, query, param, complexity_result)
             
-            logger.info(f"FiT5融合完成，使用了 {len(processed_results)} 个检索器，"
+            logger.info(f"RRF融合完成，使用了 {len(results_by_source)} 个检索器，"
                        f"融合得到 {len(fused_results)} 个结果")
             
             return response
             
         except Exception as e:
-            logger.error(f"FiT5融合失败: {e}")
+            logger.error(f"RRF融合失败: {e}")
             logger.info("回退到简单融合策略")
             return await self._fallback_fusion_strategy(retrieval_results, query, param)
     
-    async def _generate_answer_from_fused_results(
+    async def _generate_answer_from_rrf_results(
         self, 
-        fused_results: List,  # List[FusionResult] from FiT5
+        fused_results: List,  # List[RetrievalResult] from RRF
         query: str, 
         param: QueryParam,
         complexity_result: Dict[str, Any]
     ) -> str:
         """
-        从融合结果生成最终答案
+        从RRF融合结果生成最终答案
         
         Args:
-            fused_results: 融合后的检索结果列表
+            fused_results: RRF融合后的检索结果列表
             query: 原始查询
             param: 查询参数
             complexity_result: 复杂度分析结果
@@ -1051,7 +1059,7 @@ class EnhancedGraphRAG:
             生成的答案字符串
         """
         try:
-            from .fusion import FusionResult
+            from .retrieval.alignment import RetrievalResult
             
             if not fused_results:
                 from .answer_generation.prompts import PROMPTS
@@ -1060,9 +1068,11 @@ class EnhancedGraphRAG:
             # 构建融合上下文
             context_parts = []
             for i, result in enumerate(fused_results):
-                if isinstance(result, FusionResult):
-                    # 添加结果来源和FiT5分数信息
-                    source_info = f"[来源: {result.source}, FiT5分数: {result.score:.3f}, 排名: {result.fusion_rank}]"
+                if isinstance(result, RetrievalResult):
+                    # 添加结果来源和RRF分数信息
+                    rrf_score = result.metadata.get('rrf_score', 0.0)
+                    fusion_rank = result.metadata.get('fusion_rank', i + 1)
+                    source_info = f"[来源: {result.source}, RRF分数: {rrf_score:.3f}, 融合排名: {fusion_rank}]"
                     context_parts.append(f"{source_info}\n{result.content}")
                 else:
                     # 兼容其他格式
@@ -1075,13 +1085,11 @@ class EnhancedGraphRAG:
             # 使用分隔符连接内容
             fused_context = "\n\n--融合内容--\n".join(context_parts)
             
-            # 添加FiT5融合统计信息
-            fusion_stats = f"\n\n[FiT5融合统计] 融合了 {len(fused_results)} 个结果"
-            if fused_results and hasattr(fused_results[0], 'metadata') and fused_results[0].metadata:
-                fusion_method = fused_results[0].metadata.get('fusion_method', 'fit5')
-                fusion_stats += f"，使用 {fusion_method} 融合方法"
-            else:
-                fusion_stats += "，使用 FiT5 融合方法"
+            # 添加RRF融合统计信息
+            fusion_stats = f"\n\n[RRF融合统计] 使用置信度感知的RRF算法融合了 {len(fused_results)} 个结果"
+            if self.fusion_engine:
+                fusion_engine_stats = self.fusion_engine.get_fusion_stats()
+                fusion_stats += f"，融合引擎已处理 {fusion_engine_stats.get('total_fusions', 0)} 次融合"
             
             complete_context = fused_context + fusion_stats
             
@@ -1112,13 +1120,14 @@ class EnhancedGraphRAG:
                 **self.special_community_report_llm_kwargs
             )
             
-            logger.debug(f"从 {len(fused_results)} 个融合结果生成答案成功")
+            logger.debug(f"从 {len(fused_results)} 个RRF融合结果生成答案成功")
             return response
             
         except Exception as e:
-            logger.error(f"从融合结果生成答案失败: {e}")
+            logger.error(f"从RRF融合结果生成答案失败: {e}")
             from .answer_generation.prompts import PROMPTS
             return PROMPTS["fail_response"]
+    
     
     async def _fallback_fusion_strategy(
         self, 
@@ -1206,11 +1215,11 @@ GraphRAG = EnhancedGraphRAG
 
 
 def create_enhanced_graphrag(**kwargs) -> EnhancedGraphRAG:
-    """创建增强版GraphRAG实例"""
+
     return EnhancedGraphRAG(**kwargs)
 
 
 def create_basic_graphrag(**kwargs) -> EnhancedGraphRAG:
-    """创建基础版GraphRAG实例（禁用增强功能）"""
+
     kwargs['enable_enhanced_features'] = False
     return EnhancedGraphRAG(**kwargs)

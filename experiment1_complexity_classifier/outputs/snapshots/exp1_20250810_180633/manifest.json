@@ -1,0 +1,123 @@
+{
+  "stage": "experiment1_complexity_classifier",
+  "timestamp": "20250810_180633",
+  "dataset_samples": 1740,
+  "routing_best_threshold": 0.6,
+  "routing_best_accuracy": 0.8603448275862069,
+  "routing_best_coverage": 0.9379310344827586,
+  "threshold_points": [
+    {
+      "threshold": 0.6,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.9379310344827586,
+      "high_confidence_accuracy": 0.8823529411764706,
+      "fallback_usage_rate": 0.06206896551724138
+    },
+    {
+      "threshold": 0.7,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.7902298850574713,
+      "high_confidence_accuracy": 0.9287272727272727,
+      "fallback_usage_rate": 0.20977011494252873
+    },
+    {
+      "threshold": 0.8,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.7459770114942529,
+      "high_confidence_accuracy": 0.9429892141756548,
+      "fallback_usage_rate": 0.2540229885057471
+    },
+    {
+      "threshold": 0.9,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.5879310344827586,
+      "high_confidence_accuracy": 0.9765395894428153,
+      "fallback_usage_rate": 0.41206896551724137
+    }
+  ],
+  "calibration": {
+    "best_method": null,
+    "table_rows": []
+  },
+  "baselines": {
+    "entries": [
+      {
+        "Model": "RobertaClassifier",
+        "Accuracy": "0.8466",
+        "Macro-F1": "0.8455",
+        "ECE": "0.0414",
+        "Composite Score": "0.8051"
+      },
+      {
+        "Model": "ModernBertClassifier",
+        "Accuracy": "0.8586206896551725",
+        "Macro-F1": "0.853610968934477",
+        "ECE": "0.07699720294311126",
+        "Composite Score": "0.7816234867120612"
+      },
+      {
+        "Model": "BertClassifier",
+        "Accuracy": "0.8466",
+        "Macro-F1": "0.8421",
+        "ECE": "0.0743",
+        "Composite Score": "0.7723"
+      },
+      {
+        "Model": "RuleBasedClassifier",
+        "Accuracy": "0.4655",
+        "Macro-F1": "0.4718",
+        "ECE": "0.2722",
+        "Composite Score": "0.1933"
+      },
+      {
+        "Model": "RandomClassifier",
+        "Accuracy": "0.3236",
+        "Macro-F1": "0.3219",
+        "ECE": "0.1981",
+        "Composite Score": "0.1255"
+      }
+    ]
+  },
+  "figures": [
+    "outputs\\snapshots\\exp1_20250810_180633\\routing_performance_curves.png"
+  ],
+  "copied_files": [
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/routing_threshold_analysis.csv",
+      "exists": true,
+      "size_bytes": 1492,
+      "sha256": "abc4a93f8aa05207d970d104462ee3ca132efcdb68631cc28c60101005383867"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/routing_performance_results.json",
+      "exists": true,
+      "size_bytes": 7071,
+      "sha256": "23bbaa8e682186f7d33f46cec2b14b6a15dbbd2208fc1fee166730669cd29f6c"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/routing_performance_report.md",
+      "exists": true,
+      "size_bytes": 4416,
+      "sha256": "48c39095c462d16ddc0ddc4f2f2e978f9c5f1ac1d72520375a391d3bb9e3b363"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/calibration_report.md",
+      "exists": true,
+      "size_bytes": 1626,
+      "sha256": "fa3d55980d7150f1dc7cb26e137f5af9408d93375ec2c3c391da695d0e0af2e1"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/baseline_models_summary_unified.csv",
+      "exists": true,
+      "size_bytes": 329,
+      "sha256": "0858df37efb7b61fa1ae592da1fb50337edbaf25f19dbce40ef6b050c1d2c142"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_180633/routing_performance_curves.png",
+      "exists": true,
+      "size_bytes": 180860,
+      "sha256": "cff136c6f5a5f0cb0613e72cdeb95483e083cc2f16c062ca00e9172346ab52c1"
+    }
+  ],
+  "notes": "本快照聚合了阈值-覆盖-准确率权衡、校准对比与基线结果，用于后续实验对比与论文引用。"
+}

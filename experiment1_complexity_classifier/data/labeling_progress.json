@@ -1,0 +1,13 @@
+{
+  "completed_batches": 965,
+  "total_batches": 965,
+  "completed_samples": 9650,
+  "total_samples": 9650,
+  "start_time": "2025-08-06T19:26:35.971214",
+  "last_update": "2025-08-07T16:47:25.595805",
+  "failed_samples": [
+    "cla what is",
+    "which organ system in humans is most directly"
+  ],
+  "batch_results": []
+}

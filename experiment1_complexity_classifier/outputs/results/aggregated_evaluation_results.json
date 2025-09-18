@@ -1,0 +1,97 @@
+{
+  "random": {
+    "model_type": "baseline",
+    "accuracy": 0.3235632183908046,
+    "macro_f1": 0.3219440701766796,
+    "micro_f1": 0.3235632183908046,
+    "ECE": 0.19806459441770424,
+    "MCE": 0.9629831937693544,
+    "brier_score": 0.7717350196400874,
+    "nll": 1.3522010600357628
+  },
+  "rule_based": {
+    "model_type": "baseline",
+    "accuracy": 0.46551724137931033,
+    "macro_f1": 0.4717889344913222,
+    "micro_f1": 0.46551724137931033,
+    "ECE": 0.27218390804597703,
+    "MCE": 0.3999999999999999,
+    "brier_score": 0.7416896551724138,
+    "nll": 1.2116840350036044
+  },
+  "bert": {
+    "model_type": "baseline",
+    "accuracy": 0.846551724137931,
+    "macro_f1": 0.8420523109261114,
+    "micro_f1": 0.846551724137931,
+    "ECE": 0.07428542147765216,
+    "MCE": 0.18717118583876513,
+    "brier_score": 0.22504236070109984,
+    "nll": "0.39693058"
+  },
+  "roberta": {
+    "model_type": "baseline",
+    "accuracy": 0.846551724137931,
+    "macro_f1": 0.8454561186020809,
+    "micro_f1": 0.846551724137931,
+    "ECE": 0.0414499046816223,
+    "MCE": 0.3875187039375305,
+    "brier_score": 0.21079973315885772,
+    "nll": "0.35527414"
+  },
+  "modernbert_uncalibrated": {
+    "model_type": "calibrated",
+    "calibration_method": "uncalibrated",
+    "accuracy": 0.8344827586206897,
+    "macro_f1": NaN,
+    "micro_f1": NaN,
+    "ECE": 0.10210744156234566,
+    "MCE": 0.3711250478571112,
+    "brier_score": 0.24469342673337138,
+    "nll": 0.4719053929844861
+  },
+  "modernbert_temperature_scaling": {
+    "model_type": "calibrated",
+    "calibration_method": "temperature_scaling",
+    "accuracy": 0.8344827586206897,
+    "macro_f1": NaN,
+    "micro_f1": NaN,
+    "ECE": 0.04467564656277864,
+    "MCE": 0.4561526185025896,
+    "brier_score": 0.21440084181718427,
+    "nll": 0.36116719751215826
+  },
+  "modernbert_tva_platt": {
+    "model_type": "calibrated",
+    "calibration_method": "tva_platt",
+    "accuracy": 0.8344827586206897,
+    "macro_f1": NaN,
+    "micro_f1": NaN,
+    "ECE": 0.06058728298113295,
+    "MCE": 0.523337553686177,
+    "brier_score": 0.24536394860371538,
+    "nll": 0.4491191599295253
+  },
+  "modernbert_tva_isotonic": {
+    "model_type": "calibrated",
+    "calibration_method": "tva_isotonic",
+    "accuracy": 0.8367816091954023,
+    "macro_f1": NaN,
+    "micro_f1": NaN,
+    "ECE": 0.040218273950558325,
+    "MCE": 0.5323989417179552,
+    "brier_score": 0.2432443620569785,
+    "nll": 0.5012990399759442
+  },
+  "modernbert_tva_temperature": {
+    "model_type": "calibrated",
+    "calibration_method": "tva_temperature",
+    "accuracy": 0.8344827586206897,
+    "macro_f1": NaN,
+    "micro_f1": NaN,
+    "ECE": 0.060727231091540275,
+    "MCE": 0.5258726192005214,
+    "brier_score": 0.24480571430836617,
+    "nll": 0.44859097155638905
+  }
+}

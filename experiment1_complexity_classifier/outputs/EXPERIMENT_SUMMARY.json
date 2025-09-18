@@ -1,0 +1,62 @@
+{
+  "experiment_id": "experiment1_complexity_classifier",
+  "experiment_name": "复杂度分类器有效性验证",
+  "completion_time": "2025-08-10T18:55:59.505623",
+  "overall_success": false,
+  "all_targets_achieved": false,
+  "core_targets": {
+    "accuracy": {
+      "achieved": false,
+      "target": 0.85,
+      "best_value": 0.8466,
+      "achieving_models": []
+    },
+    "ece": {
+      "achieved": true,
+      "target": 0.08,
+      "best_value": 0.0402,
+      "achieving_models": [
+        "bert",
+        "roberta",
+        "modernbert_temperature_scaling",
+        "modernbert_tva_platt",
+        "modernbert_tva_isotonic",
+        "modernbert_tva_temperature"
+      ]
+    },
+    "routing": {
+      "achieved": false,
+      "target": 0.9,
+      "best_value": 0.860919540229885,
+      "best_threshold": 0.5
+    }
+  },
+  "best_models": {
+    "best_accuracy": {
+      "model": "bert",
+      "accuracy": 0.8466,
+      "ece": 0.0402
+    },
+    "best_calibration": {
+      "model": "modernbert_tva_isotonic",
+      "ece": 0.0402,
+      "accuracy": 0.8368
+    }
+  },
+  "key_improvements": {
+    "calibration": {
+      "best_method": "tva_isotonic",
+      "ece_improvement": 60.63,
+      "ece_before": null,
+      "ece_after": 0.0402
+    }
+  },
+  "next_steps": {
+    "ready_for_experiment2": false,
+    "recommended_model": "modernbert_tva_isotonic",
+    "priority_improvements": [
+      "improve_classification_accuracy",
+      "optimize_routing_strategy"
+    ]
+  }
+}

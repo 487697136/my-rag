@@ -1,0 +1,215 @@
+# 校准方法配置文件
+# Experiment 1: Calibration Methods Configuration
+
+# 校准数据配置
+calibration_data:
+  # 校准集比例 (从训练数据中划分)
+  calibration_ratio: 0.10
+  
+  # 校准时使用的logits来源
+  logits_source: "validation_set"  # validation_set, held_out_set
+  
+  # 是否进行数据增强
+  data_augmentation: false
+
+# 校准方法配置
+calibration_methods:
+  
+  # 1. Temperature Scaling (核心创新)
+  temperature_scaling:
+    enabled: true
+    description: "单参数温度缩放校准"
+    
+    # 参数搜索配置
+    temperature_search:
+      method: "grid_search"  # grid_search, bayesian_optimization
+      search_range: [0.1, 5.0]
+      num_points: 50
+      
+    # 优化目标
+    optimization:
+      objective: "ECE"  # ECE, MCE, NLL, Brier
+      optimizer: "LBFGS"
+      max_iterations: 100
+      tolerance: 1e-6
+    
+    # 验证配置
+    validation:
+      cross_validation: true
+      n_folds: 3
+  
+  # 2. Top-Versus-All + Platt Scaling
+  tva_platt:
+    enabled: true
+    description: "TvA二分类 + Platt缩放"
+    
+    # TvA配置
+    top_versus_all:
+      surrogate_task: "max_logit_vs_true"
+      binary_threshold: 0.5
+    
+    # Platt Scaling配置
+    platt_scaling:
+      # Logistic回归参数
+      regularization: 1e-6
+      max_iterations: 1000
+      solver: "lbfgs"
+      
+      # 参数搜索
+      parameter_search:
+        C_values: [0.001, 0.01, 0.1, 1.0, 10.0]
+        cross_validation: 3
+  
+  # 3. Top-Versus-All + Isotonic Regression  
+  tva_isotonic:
+    enabled: true
+    description: "TvA二分类 + 等距回归"
+    
+    # TvA配置
+    top_versus_all:
+      surrogate_task: "max_logit_vs_true"
+      binary_threshold: 0.5
+    
+    # Isotonic Regression配置
+    isotonic_regression:
+      increasing: true  # 单调递增约束
+      out_of_bounds: "clip"  # clip, nan
+      
+      # 正则化选项
+      smoothing:
+        enabled: false
+        method: "spline"
+        smoothing_factor: 0.1
+  
+  # 4. TvA + Temperature Scaling (可选组合)
+  tva_temperature:
+    enabled: true
+    description: "TvA + 温度缩放组合"
+    
+    # 组合策略
+    combination:
+      method: "sequential"  # sequential, ensemble
+      tva_first: true
+      
+    # TvA配置
+    top_versus_all:
+      surrogate_task: "max_logit_vs_true"
+    
+    # Temperature配置
+    temperature_scaling:
+      search_range: [0.5, 3.0]
+      num_points: 30
+
+# 校准评估配置
+evaluation:
+  # 校准指标
+  calibration_metrics:
+    # Expected Calibration Error (核心指标)
+    ECE:
+      enabled: true
+      num_bins: 15
+      bin_strategy: "equal_width"  # equal_width, equal_frequency
+      norm: "l1"  # l1, l2, max
+      
+    # Maximum Calibration Error
+    MCE:
+      enabled: true
+      num_bins: 15
+      bin_strategy: "equal_width"
+      
+    # Brier Score
+    brier_score:
+      enabled: true
+      
+    # Negative Log Likelihood
+    negative_log_likelihood:
+      enabled: true
+      
+    # Reliability Diagram数据
+    reliability_diagram:
+      enabled: true
+      num_bins: 15
+      save_data: true
+  
+  # 性能保持评估
+  performance_preservation:
+    # 校准前后性能对比
+    accuracy_degradation_threshold: 0.02  # 允许的准确率下降
+    f1_degradation_threshold: 0.02
+    
+    # 统计显著性检验
+    statistical_tests:
+      paired_t_test: true
+      wilcoxon_signed_rank: true
+      mcnemar_test: true
+      alpha: 0.05
+
+# 可视化配置
+visualization:
+  # Reliability Curves
+  reliability_curves:
+    enabled: true
+    figure_size: [10, 8]
+    save_format: ["png", "pdf"]
+    dpi: 300
+    
+    # 绘图样式
+    style:
+      ideal_line: true
+      confidence_bars: true
+      bin_counts: true
+      
+  # 校准前后对比图
+  before_after_comparison:
+    enabled: true
+    metrics: ["ECE", "MCE", "Brier"]
+    plot_type: "bar"  # bar, radar
+    
+  # 温度参数可视化
+  temperature_analysis:
+    enabled: true
+    temperature_vs_ece_curve: true
+    optimal_temperature_highlight: true
+
+# 模型保存配置
+model_saving:
+  # 校准器保存
+  save_calibrators: true
+  save_format: "pytorch"  # pytorch, sklearn, custom
+  
+  # 校准后模型保存
+  save_calibrated_models: true
+  
+  # 目录结构
+  output_structure:
+    calibrators_dir: "outputs/models/calibrators"
+    calibrated_models_dir: "outputs/models/calibrated"
+    
+# 实验记录
+experiment_tracking:
+  # 记录所有校准实验
+  log_all_attempts: true
+  
+  # 最佳校准方法选择标准
+  best_method_criteria:
+    primary_metric: "ECE"
+    secondary_metrics: ["accuracy", "macro_f1"]
+    weights: [0.6, 0.2, 0.2]
+  
+  # 结果汇总
+  generate_summary: true
+  summary_format: ["json", "csv"]
+
+# 硬件与优化
+optimization:
+  # 并行处理
+  parallel_calibration: true
+  n_jobs: -1  # 使用所有可用CPU核心
+  
+  # 内存优化
+  batch_processing: true
+  batch_size: 1000
+  
+  # 缓存配置
+  cache_logits: true
+  cache_dir: "outputs/cache"

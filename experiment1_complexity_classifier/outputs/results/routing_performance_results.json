@@ -1,0 +1,543 @@
+{
+  "routing_results": [
+    {
+      "threshold": 0.5,
+      "route_accuracy": 0.860919540229885,
+      "optimal_coverage": 0.993103448275862,
+      "high_confidence_accuracy": 0.8628472222222222,
+      "fallback_usage_rate": 0.006896551724137931,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 404,
+          "percentage": 23.218390804597703,
+          "avg_confidence": 0.8318372877303333
+        },
+        "naive": {
+          "count": 722,
+          "percentage": 41.49425287356322,
+          "avg_confidence": 0.7917344987260869
+        },
+        "local": {
+          "count": 614,
+          "percentage": 35.287356321839084,
+          "avg_confidence": 0.9745813972369471
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.55,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.9919540229885058,
+      "high_confidence_accuracy": 0.8626882966396292,
+      "fallback_usage_rate": 0.008045977011494253,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 403,
+          "percentage": 23.160919540229884,
+          "avg_confidence": 0.8326607053177535
+        },
+        "naive": {
+          "count": 723,
+          "percentage": 41.55172413793103,
+          "avg_confidence": 0.7899478673308916
+        },
+        "local": {
+          "count": 614,
+          "percentage": 35.287356321839084,
+          "avg_confidence": 0.9745813972369471
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.6,
+      "route_accuracy": 0.8614942528735632,
+      "optimal_coverage": 0.9379310344827586,
+      "high_confidence_accuracy": 0.8823529411764706,
+      "fallback_usage_rate": 0.06206896551724138,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 391,
+          "percentage": 22.47126436781609,
+          "avg_confidence": 0.8223311892897324
+        },
+        "naive": {
+          "count": 739,
+          "percentage": 42.47126436781609,
+          "avg_confidence": 0.7222150520498649
+        },
+        "local": {
+          "count": 610,
+          "percentage": 35.05747126436782,
+          "avg_confidence": 0.9752217796652348
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.65,
+      "route_accuracy": 0.8471264367816091,
+      "optimal_coverage": 0.7902298850574713,
+      "high_confidence_accuracy": 0.9287272727272727,
+      "fallback_usage_rate": 0.20977011494252873,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 338,
+          "percentage": 19.42528735632184,
+          "avg_confidence": 0.7893201347993328
+        },
+        "naive": {
+          "count": 801,
+          "percentage": 46.03448275862069,
+          "avg_confidence": 0.5414782822907465
+        },
+        "local": {
+          "count": 601,
+          "percentage": 34.54022988505747,
+          "avg_confidence": 0.9749337308104965
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.7,
+      "route_accuracy": 0.8471264367816091,
+      "optimal_coverage": 0.7902298850574713,
+      "high_confidence_accuracy": 0.9287272727272727,
+      "fallback_usage_rate": 0.20977011494252873,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 338,
+          "percentage": 19.42528735632184,
+          "avg_confidence": 0.7893201347993328
+        },
+        "naive": {
+          "count": 801,
+          "percentage": 46.03448275862069,
+          "avg_confidence": 0.5414782822907465
+        },
+        "local": {
+          "count": 601,
+          "percentage": 34.54022988505747,
+          "avg_confidence": 0.9749337308104965
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.75,
+      "route_accuracy": 0.8419540229885057,
+      "optimal_coverage": 0.7459770114942529,
+      "high_confidence_accuracy": 0.9429892141756548,
+      "fallback_usage_rate": 0.2540229885057471,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 319,
+          "percentage": 18.333333333333332,
+          "avg_confidence": 0.7766690240656068
+        },
+        "naive": {
+          "count": 822,
+          "percentage": 47.241379310344826,
+          "avg_confidence": 0.48733936322859406
+        },
+        "local": {
+          "count": 599,
+          "percentage": 34.42528735632184,
+          "avg_confidence": 0.9746584609661899
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.8,
+      "route_accuracy": 0.8419540229885057,
+      "optimal_coverage": 0.7459770114942529,
+      "high_confidence_accuracy": 0.9429892141756548,
+      "fallback_usage_rate": 0.2540229885057471,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 319,
+          "percentage": 18.333333333333332,
+          "avg_confidence": 0.7766690240656068
+        },
+        "naive": {
+          "count": 822,
+          "percentage": 47.241379310344826,
+          "avg_confidence": 0.48733936322859406
+        },
+        "local": {
+          "count": 599,
+          "percentage": 34.42528735632184,
+          "avg_confidence": 0.9746584609661899
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.85,
+      "route_accuracy": 0.8298850574712644,
+      "optimal_coverage": 0.6442528735632184,
+      "high_confidence_accuracy": 0.9669937555753791,
+      "fallback_usage_rate": 0.35574712643678164,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 282,
+          "percentage": 16.206896551724135,
+          "avg_confidence": 0.726681399253092
+        },
+        "naive": {
+          "count": 867,
+          "percentage": 49.82758620689655,
+          "avg_confidence": 0.35360565471893896
+        },
+        "local": {
+          "count": 591,
+          "percentage": 33.96551724137931,
+          "avg_confidence": 0.9724744553933578
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.9,
+      "route_accuracy": 0.8224137931034483,
+      "optimal_coverage": 0.5879310344827586,
+      "high_confidence_accuracy": 0.9765395894428153,
+      "fallback_usage_rate": 0.41206896551724137,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 264,
+          "percentage": 15.172413793103448,
+          "avg_confidence": 0.6852105422757596
+        },
+        "naive": {
+          "count": 894,
+          "percentage": 51.37931034482759,
+          "avg_confidence": 0.28232652367464156
+        },
+        "local": {
+          "count": 582,
+          "percentage": 33.44827586206897,
+          "avg_confidence": 0.9723065346004715
+        }
+      },
+      "n_samples": 1740
+    },
+    {
+      "threshold": 0.95,
+      "route_accuracy": 0.7810344827586206,
+      "optimal_coverage": 0.4017241379310345,
+      "high_confidence_accuracy": 0.9957081545064378,
+      "fallback_usage_rate": 0.5982758620689655,
+      "avg_confidence": 0.8682069834971592,
+      "mode_distribution": {
+        "llm_only": {
+          "count": 216,
+          "percentage": 12.413793103448276,
+          "avg_confidence": 0.48431069958847733
+        },
+        "naive": {
+          "count": 978,
+          "percentage": 56.20689655172414,
+          "avg_confidence": 0.06307450785978394
+        },
+        "local": {
+          "count": 546,
+          "percentage": 31.379310344827587,
+          "avg_confidence": 0.9733666291849632
+        }
+      },
+      "n_samples": 1740
+    }
+  ],
+  "analysis_results": {
+    "best_threshold": 0.5,
+    "best_route_accuracy": 0.860919540229885,
+    "best_coverage": 0.993103448275862,
+    "target_achieved": false,
+    "achievable_thresholds": [],
+    "threshold_analysis": [
+      {
+        "threshold": 0.5,
+        "route_accuracy": 0.860919540229885,
+        "optimal_coverage": 0.993103448275862,
+        "high_confidence_accuracy": 0.8628472222222222,
+        "fallback_usage_rate": 0.006896551724137931,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 404,
+            "percentage": 23.218390804597703,
+            "avg_confidence": 0.8318372877303333
+          },
+          "naive": {
+            "count": 722,
+            "percentage": 41.49425287356322,
+            "avg_confidence": 0.7917344987260869
+          },
+          "local": {
+            "count": 614,
+            "percentage": 35.287356321839084,
+            "avg_confidence": 0.9745813972369471
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.900574712643678
+      },
+      {
+        "threshold": 0.55,
+        "route_accuracy": 0.8603448275862069,
+        "optimal_coverage": 0.9919540229885058,
+        "high_confidence_accuracy": 0.8626882966396292,
+        "fallback_usage_rate": 0.008045977011494253,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 403,
+            "percentage": 23.160919540229884,
+            "avg_confidence": 0.8326607053177535
+          },
+          "naive": {
+            "count": 723,
+            "percentage": 41.55172413793103,
+            "avg_confidence": 0.7899478673308916
+          },
+          "local": {
+            "count": 614,
+            "percentage": 35.287356321839084,
+            "avg_confidence": 0.9745813972369471
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8998275862068965
+      },
+      {
+        "threshold": 0.6,
+        "route_accuracy": 0.8614942528735632,
+        "optimal_coverage": 0.9379310344827586,
+        "high_confidence_accuracy": 0.8823529411764706,
+        "fallback_usage_rate": 0.06206896551724138,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 391,
+            "percentage": 22.47126436781609,
+            "avg_confidence": 0.8223311892897324
+          },
+          "naive": {
+            "count": 739,
+            "percentage": 42.47126436781609,
+            "avg_confidence": 0.7222150520498649
+          },
+          "local": {
+            "count": 610,
+            "percentage": 35.05747126436782,
+            "avg_confidence": 0.9752217796652348
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8844252873563218
+      },
+      {
+        "threshold": 0.65,
+        "route_accuracy": 0.8471264367816091,
+        "optimal_coverage": 0.7902298850574713,
+        "high_confidence_accuracy": 0.9287272727272727,
+        "fallback_usage_rate": 0.20977011494252873,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 338,
+            "percentage": 19.42528735632184,
+            "avg_confidence": 0.7893201347993328
+          },
+          "naive": {
+            "count": 801,
+            "percentage": 46.03448275862069,
+            "avg_confidence": 0.5414782822907465
+          },
+          "local": {
+            "count": 601,
+            "percentage": 34.54022988505747,
+            "avg_confidence": 0.9749337308104965
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8300574712643678
+      },
+      {
+        "threshold": 0.7,
+        "route_accuracy": 0.8471264367816091,
+        "optimal_coverage": 0.7902298850574713,
+        "high_confidence_accuracy": 0.9287272727272727,
+        "fallback_usage_rate": 0.20977011494252873,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 338,
+            "percentage": 19.42528735632184,
+            "avg_confidence": 0.7893201347993328
+          },
+          "naive": {
+            "count": 801,
+            "percentage": 46.03448275862069,
+            "avg_confidence": 0.5414782822907465
+          },
+          "local": {
+            "count": 601,
+            "percentage": 34.54022988505747,
+            "avg_confidence": 0.9749337308104965
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8300574712643678
+      },
+      {
+        "threshold": 0.75,
+        "route_accuracy": 0.8419540229885057,
+        "optimal_coverage": 0.7459770114942529,
+        "high_confidence_accuracy": 0.9429892141756548,
+        "fallback_usage_rate": 0.2540229885057471,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 319,
+            "percentage": 18.333333333333332,
+            "avg_confidence": 0.7766690240656068
+          },
+          "naive": {
+            "count": 822,
+            "percentage": 47.241379310344826,
+            "avg_confidence": 0.48733936322859406
+          },
+          "local": {
+            "count": 599,
+            "percentage": 34.42528735632184,
+            "avg_confidence": 0.9746584609661899
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8131609195402298
+      },
+      {
+        "threshold": 0.8,
+        "route_accuracy": 0.8419540229885057,
+        "optimal_coverage": 0.7459770114942529,
+        "high_confidence_accuracy": 0.9429892141756548,
+        "fallback_usage_rate": 0.2540229885057471,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 319,
+            "percentage": 18.333333333333332,
+            "avg_confidence": 0.7766690240656068
+          },
+          "naive": {
+            "count": 822,
+            "percentage": 47.241379310344826,
+            "avg_confidence": 0.48733936322859406
+          },
+          "local": {
+            "count": 599,
+            "percentage": 34.42528735632184,
+            "avg_confidence": 0.9746584609661899
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.8131609195402298
+      },
+      {
+        "threshold": 0.85,
+        "route_accuracy": 0.8298850574712644,
+        "optimal_coverage": 0.6442528735632184,
+        "high_confidence_accuracy": 0.9669937555753791,
+        "fallback_usage_rate": 0.35574712643678164,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 282,
+            "percentage": 16.206896551724135,
+            "avg_confidence": 0.726681399253092
+          },
+          "naive": {
+            "count": 867,
+            "percentage": 49.82758620689655,
+            "avg_confidence": 0.35360565471893896
+          },
+          "local": {
+            "count": 591,
+            "percentage": 33.96551724137931,
+            "avg_confidence": 0.9724744553933578
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.7741954022988505
+      },
+      {
+        "threshold": 0.9,
+        "route_accuracy": 0.8224137931034483,
+        "optimal_coverage": 0.5879310344827586,
+        "high_confidence_accuracy": 0.9765395894428153,
+        "fallback_usage_rate": 0.41206896551724137,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 264,
+            "percentage": 15.172413793103448,
+            "avg_confidence": 0.6852105422757596
+          },
+          "naive": {
+            "count": 894,
+            "percentage": 51.37931034482759,
+            "avg_confidence": 0.28232652367464156
+          },
+          "local": {
+            "count": 582,
+            "percentage": 33.44827586206897,
+            "avg_confidence": 0.9723065346004715
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.7520689655172413
+      },
+      {
+        "threshold": 0.95,
+        "route_accuracy": 0.7810344827586206,
+        "optimal_coverage": 0.4017241379310345,
+        "high_confidence_accuracy": 0.9957081545064378,
+        "fallback_usage_rate": 0.5982758620689655,
+        "avg_confidence": 0.8682069834971592,
+        "mode_distribution": {
+          "llm_only": {
+            "count": 216,
+            "percentage": 12.413793103448276,
+            "avg_confidence": 0.48431069958847733
+          },
+          "naive": {
+            "count": 978,
+            "percentage": 56.20689655172414,
+            "avg_confidence": 0.06307450785978394
+          },
+          "local": {
+            "count": 546,
+            "percentage": 31.379310344827587,
+            "avg_confidence": 0.9733666291849632
+          }
+        },
+        "n_samples": 1740,
+        "composite_score": 0.6672413793103447
+      }
+    ]
+  }
+}

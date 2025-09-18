@@ -1,0 +1,194 @@
+# 模型训练配置文件
+# Experiment 1: Complexity Classifier Training Configuration
+
+# 数据集配置
+data:
+  # 原始数据路径
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  
+  # 数据集来源与采样
+  datasets:
+    ms_marco:
+      path: "ms_marco_dev.jsonl"
+      sample_size: 4000
+      weight: 1.0
+    natural_questions:
+      path: "natural_questions_dev.jsonl" 
+      sample_size: 4000
+      weight: 1.0
+    hotpot_qa:
+      path: "hotpot_qa_dev.jsonl"
+      sample_size: 4000
+      weight: 1.0
+  
+  # 复杂度分布目标比例
+  complexity_distribution:
+    zero_hop: 0.25   # 25%
+    one_hop: 0.40    # 40% 
+    multi_hop: 0.35  # 35%
+  
+  # 数据划分
+  split_ratios:
+    train: 0.90      # 90% for training (≈10,800)
+    calibration: 0.10 # 10% for calibration (≈1,200)
+    test_size: 2000   # Independent test set
+  
+  # 人工审核配置
+  manual_review:
+    sample_size: 500
+    seed: 42
+
+# 模型配置
+models:
+  # 基线模型
+  baselines:
+    random:
+      type: "RandomClassifier"
+      num_classes: 3
+      seed: 42
+    
+    rule_based:
+      type: "RuleBasedClassifier"
+      keywords:
+        zero_hop: ["define", "what is", "meaning", "who is", "when was", "where is"]
+        one_hop: ["who", "when", "where", "which", "how many", "list", "name", "identify"] 
+        multi_hop: ["compare", "relationship", "analyze", "both", "and", "or", "between", "difference", "similar"]
+      length_thresholds:
+        short: 5    # words, likely zero-hop
+        medium: 15  # words, likely one-hop
+        long: 25    # words, likely multi-hop
+      patterns:
+        question_words: '\b(what|who|when|where|why|how|which)\b'
+        comparison: '\b(compare|versus|vs|difference|similar)\b'
+        multiple_entities: '\band\b|\bor\b'
+        superlatives: '\b(most|least|best|worst|largest|smallest)\b'
+    
+    bert_base:
+      type: "BertClassifier"
+      model_name: "bert-base-cased"
+      hidden_size: 768
+      num_classes: 3
+      dropout: 0.1
+    
+    roberta_large:
+      type: "RobertaClassifier" 
+      model_name: "roberta-large"
+      hidden_size: 1024
+      num_classes: 3
+      dropout: 0.1
+  
+  # 主要模型: ModernBERT
+  modernbert:
+    type: "ModernBertClassifier"
+    model_name: "answerdotai/ModernBERT-large"
+    hidden_size: 768
+    num_classes: 3
+    dropout: 0.1
+    
+    # 分类头配置
+    classifier_head:
+      hidden_layers: [768, 256]  # 可选中间层
+      activation: "gelu"
+      layer_norm: true
+
+# 训练配置
+training:
+  # 超参数搜索
+  hyperparameter_search:
+    learning_rates: [0.00001, 0.00002, 0.00005]  # 1e-5, 2e-5, 5e-5 的数值形式
+    batch_sizes: [16]
+    weight_decay: [0.01]
+    warmup_steps: [100, 200]
+  
+  # 训练设置
+  max_epochs: 10
+  patience: 5  # Early stopping patience
+  
+  # 优化器配置
+  optimizer:
+    type: "AdamW"
+    betas: [0.9, 0.999]
+    eps: 1e-8
+  
+  # 学习率调度
+  scheduler:
+    type: "linear_with_warmup"
+    warmup_ratio: 0.1
+  
+  # 正则化
+  gradient_clipping:
+    max_norm: 1.0
+  
+  # 交叉验证
+  cross_validation:
+    n_folds: 5
+    stratified: true
+    seed: 42
+
+# 评估配置
+evaluation:
+  # 分类指标
+  classification_metrics:
+    - "accuracy"
+    - "macro_f1"
+    - "micro_f1"
+    - "per_class_f1"
+    - "confusion_matrix"
+  
+  # 置信度相关指标
+  confidence_metrics:
+    - "max_probability"
+    - "entropy"
+    - "top_2_difference"
+
+# 硬件配置
+hardware:
+  device: "auto"  # auto, cpu, cuda
+  mixed_precision: true
+  dataloader_workers: 4
+  pin_memory: true
+
+# 日志与保存
+logging:
+  log_level: "INFO"
+  log_dir: "outputs/logs"
+  save_model_every_epoch: false
+  save_best_only: true
+  
+  # TensorBoard
+  tensorboard:
+    enabled: true
+    log_dir: "outputs/tensorboard"
+
+# 本地模型配置
+local_models:
+  enabled: true  # 启用本地模型优先策略
+  base_path: "models"  # 相对于实验根目录的模型存储路径
+  fallback_to_online: true  # 如果本地模型不存在，是否回退到在线下载
+  models:
+    bert-base-cased:
+      local_path: "models/bert_base_cased"
+      model_type: "bert"
+      hidden_size: 768
+    roberta-large:
+      local_path: "models/roberta_large" 
+      model_type: "roberta"
+      hidden_size: 1024
+    answerdotai/ModernBERT-large:
+      # 指向项目根目录下的 @models/modernbert/answerdotai_ModernBERT-large
+      # 由于本配置文件位于 experiments/experiment1_complexity_classifier 下，使用相对路径返回到项目根
+      local_path: "../../models/modernbert/answerdotai_ModernBERT-large"
+      model_type: "modernbert"
+      hidden_size: 1024
+    ModernBERT-large:
+      local_path: "../../models/modernbert/answerdotai_ModernBERT-large"
+      model_type: "modernbert"
+      hidden_size: 1024
+
+# 随机种子（确保可复现性）
+random_seeds:
+  global_seed: 42
+  data_seed: 42
+  model_seed: 42
+  training_seed: 42

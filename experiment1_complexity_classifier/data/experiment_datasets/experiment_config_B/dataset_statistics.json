@@ -1,0 +1,53 @@
+{
+  "train": {
+    "total": 19799,
+    "distribution": {
+      "one_hop": {
+        "count": 7920,
+        "percentage": 40.00202030405576
+      },
+      "multi_hop": {
+        "count": 6929,
+        "percentage": 34.99671700590939
+      },
+      "zero_hop": {
+        "count": 4950,
+        "percentage": 25.00126269003485
+      }
+    }
+  },
+  "calibration": {
+    "total": 2200,
+    "distribution": {
+      "one_hop": {
+        "count": 880,
+        "percentage": 40.0
+      },
+      "multi_hop": {
+        "count": 770,
+        "percentage": 35.0
+      },
+      "zero_hop": {
+        "count": 550,
+        "percentage": 25.0
+      }
+    }
+  },
+  "test": {
+    "total": 1740,
+    "distribution": {
+      "one_hop": {
+        "count": 696,
+        "percentage": 40.0
+      },
+      "multi_hop": {
+        "count": 609,
+        "percentage": 35.0
+      },
+      "zero_hop": {
+        "count": 435,
+        "percentage": 25.0
+      }
+    }
+  }
+}

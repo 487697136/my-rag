@@ -1,0 +1,30 @@
+{
+  "completed_models": [
+    "rule_based",
+    "random"
+  ],
+  "failed_models": [
+    {
+      "model_name": "bert_base",
+      "error": "(MaxRetryError('HTTPSConnectionPool(host=\\'huggingface.co\\', port=443): Max retries exceeded with url: /api/models/bert-base-uncased/tree/main/additional_chat_templates?recursive=False&expand=False (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000024A91E130E0>: Failed to resolve \\'huggingface.co\\' ([Errno 11001] getaddrinfo failed)\"))'), '(Request ID: ff75ef5a-2421-415e-9805-f4a0187a63d2)')",
+      "timestamp": "2025-08-08T14:46:08.620748"
+    },
+    {
+      "model_name": "bert_base",
+      "error": "(MaxRetryError('HTTPSConnectionPool(host=\\'huggingface.co\\', port=443): Max retries exceeded with url: /api/models/bert-base-uncased/tree/main/additional_chat_templates?recursive=False&expand=False (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x0000024A91E130E0>: Failed to resolve \\'huggingface.co\\' ([Errno 11001] getaddrinfo failed)\"))'), '(Request ID: ff75ef5a-2421-415e-9805-f4a0187a63d2)')",
+      "timestamp": "2025-08-08T14:46:08.626500"
+    },
+    {
+      "model_name": "roberta_large",
+      "error": "RoBERTa-Large 训练完全失败，所有参数组合都失败",
+      "timestamp": "2025-08-08T14:46:09.028984"
+    },
+    {
+      "model_name": "roberta_large",
+      "error": "RoBERTa-Large 训练完全失败，所有参数组合都失败",
+      "timestamp": "2025-08-08T14:46:09.031984"
+    }
+  ],
+  "training_start_time": "2025-08-07T19:39:03.644995",
+  "last_update_time": "2025-08-08T14:46:09.031984"
+}

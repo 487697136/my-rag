@@ -1,0 +1,116 @@
+{
+  "by_accuracy": [
+    {
+      "Model": "bert",
+      "Accuracy": 0.8466
+    },
+    {
+      "Model": "roberta",
+      "Accuracy": 0.8466
+    },
+    {
+      "Model": "modernbert_tva_isotonic",
+      "Accuracy": 0.8368
+    },
+    {
+      "Model": "modernbert_uncalibrated",
+      "Accuracy": 0.8345
+    },
+    {
+      "Model": "modernbert_temperature_scaling",
+      "Accuracy": 0.8345
+    },
+    {
+      "Model": "modernbert_tva_platt",
+      "Accuracy": 0.8345
+    },
+    {
+      "Model": "modernbert_tva_temperature",
+      "Accuracy": 0.8345
+    },
+    {
+      "Model": "rule_based",
+      "Accuracy": 0.4655
+    },
+    {
+      "Model": "random",
+      "Accuracy": 0.3236
+    }
+  ],
+  "by_macro_f1": [
+    {
+      "Model": "roberta",
+      "Macro-F1": 0.8455
+    },
+    {
+      "Model": "bert",
+      "Macro-F1": 0.8421
+    },
+    {
+      "Model": "rule_based",
+      "Macro-F1": 0.4718
+    },
+    {
+      "Model": "random",
+      "Macro-F1": 0.3219
+    },
+    {
+      "Model": "modernbert_uncalibrated",
+      "Macro-F1": NaN
+    },
+    {
+      "Model": "modernbert_temperature_scaling",
+      "Macro-F1": NaN
+    },
+    {
+      "Model": "modernbert_tva_platt",
+      "Macro-F1": NaN
+    },
+    {
+      "Model": "modernbert_tva_isotonic",
+      "Macro-F1": NaN
+    },
+    {
+      "Model": "modernbert_tva_temperature",
+      "Macro-F1": NaN
+    }
+  ],
+  "by_ece": [
+    {
+      "Model": "modernbert_tva_isotonic",
+      "ECE": 0.0402
+    },
+    {
+      "Model": "roberta",
+      "ECE": 0.0414
+    },
+    {
+      "Model": "modernbert_temperature_scaling",
+      "ECE": 0.0447
+    },
+    {
+      "Model": "modernbert_tva_platt",
+      "ECE": 0.0606
+    },
+    {
+      "Model": "modernbert_tva_temperature",
+      "ECE": 0.0607
+    },
+    {
+      "Model": "bert",
+      "ECE": 0.0743
+    },
+    {
+      "Model": "modernbert_uncalibrated",
+      "ECE": 0.1021
+    },
+    {
+      "Model": "random",
+      "ECE": 0.1981
+    },
+    {
+      "Model": "rule_based",
+      "ECE": 0.2722
+    }
+  ]
+}

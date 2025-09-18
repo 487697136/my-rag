@@ -1,0 +1,165 @@
+{
+  "stage": "experiment1_complexity_classifier",
+  "timestamp": "20250810_185822",
+  "dataset_samples": 1740,
+  "routing_best_threshold": 0.5,
+  "routing_best_accuracy": 0.860919540229885,
+  "routing_best_coverage": 0.993103448275862,
+  "threshold_points": [
+    {
+      "threshold": 0.5,
+      "route_accuracy": 0.860919540229885,
+      "optimal_coverage": 0.993103448275862,
+      "high_confidence_accuracy": 0.8628472222222222,
+      "fallback_usage_rate": 0.006896551724137931
+    },
+    {
+      "threshold": 0.55,
+      "route_accuracy": 0.8603448275862069,
+      "optimal_coverage": 0.9919540229885058,
+      "high_confidence_accuracy": 0.8626882966396292,
+      "fallback_usage_rate": 0.008045977011494253
+    },
+    {
+      "threshold": 0.6,
+      "route_accuracy": 0.8614942528735632,
+      "optimal_coverage": 0.9379310344827586,
+      "high_confidence_accuracy": 0.8823529411764706,
+      "fallback_usage_rate": 0.06206896551724138
+    },
+    {
+      "threshold": 0.65,
+      "route_accuracy": 0.8471264367816091,
+      "optimal_coverage": 0.7902298850574713,
+      "high_confidence_accuracy": 0.9287272727272727,
+      "fallback_usage_rate": 0.20977011494252873
+    },
+    {
+      "threshold": 0.7,
+      "route_accuracy": 0.8471264367816091,
+      "optimal_coverage": 0.7902298850574713,
+      "high_confidence_accuracy": 0.9287272727272727,
+      "fallback_usage_rate": 0.20977011494252873
+    },
+    {
+      "threshold": 0.75,
+      "route_accuracy": 0.8419540229885057,
+      "optimal_coverage": 0.7459770114942529,
+      "high_confidence_accuracy": 0.9429892141756548,
+      "fallback_usage_rate": 0.2540229885057471
+    },
+    {
+      "threshold": 0.8,
+      "route_accuracy": 0.8419540229885057,
+      "optimal_coverage": 0.7459770114942529,
+      "high_confidence_accuracy": 0.9429892141756548,
+      "fallback_usage_rate": 0.2540229885057471
+    },
+    {
+      "threshold": 0.85,
+      "route_accuracy": 0.8298850574712644,
+      "optimal_coverage": 0.6442528735632184,
+      "high_confidence_accuracy": 0.9669937555753791,
+      "fallback_usage_rate": 0.35574712643678164
+    },
+    {
+      "threshold": 0.9,
+      "route_accuracy": 0.8224137931034483,
+      "optimal_coverage": 0.5879310344827586,
+      "high_confidence_accuracy": 0.9765395894428153,
+      "fallback_usage_rate": 0.41206896551724137
+    },
+    {
+      "threshold": 0.95,
+      "route_accuracy": 0.7810344827586206,
+      "optimal_coverage": 0.4017241379310345,
+      "high_confidence_accuracy": 0.9957081545064378,
+      "fallback_usage_rate": 0.5982758620689655
+    }
+  ],
+  "calibration": {
+    "best_method": null,
+    "table_rows": []
+  },
+  "baselines": {
+    "entries": [
+      {
+        "Model": "RobertaClassifier",
+        "Accuracy": "0.8466",
+        "Macro-F1": "0.8455",
+        "ECE": "0.0414",
+        "Composite Score": "0.8051"
+      },
+      {
+        "Model": "ModernBertClassifier",
+        "Accuracy": "0.8586206896551725",
+        "Macro-F1": "0.853610968934477",
+        "ECE": "0.07699720294311126",
+        "Composite Score": "0.7816234867120612"
+      },
+      {
+        "Model": "BertClassifier",
+        "Accuracy": "0.8466",
+        "Macro-F1": "0.8421",
+        "ECE": "0.0743",
+        "Composite Score": "0.7723"
+      },
+      {
+        "Model": "RuleBasedClassifier",
+        "Accuracy": "0.4655",
+        "Macro-F1": "0.4718",
+        "ECE": "0.2722",
+        "Composite Score": "0.1933"
+      },
+      {
+        "Model": "RandomClassifier",
+        "Accuracy": "0.3236",
+        "Macro-F1": "0.3219",
+        "ECE": "0.1981",
+        "Composite Score": "0.1255"
+      }
+    ]
+  },
+  "figures": [
+    "outputs\\snapshots\\exp1_20250810_185822\\routing_performance_curves.png"
+  ],
+  "copied_files": [
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/routing_threshold_analysis.csv",
+      "exists": true,
+      "size_bytes": 3531,
+      "sha256": "7e3be811499ebdf4cd79553f5e4e893a7f2bfa431d419da90dbd6e83b0d742c6"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/routing_performance_results.json",
+      "exists": true,
+      "size_bytes": 17256,
+      "sha256": "b0ac7be2dd4e3ab583ecc30820702e04f62082719d43919c8777e0d6b8319398"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/routing_performance_report.md",
+      "exists": true,
+      "size_bytes": 7075,
+      "sha256": "daee7b25e8b4247742826e4c57fb007e24a9a85d54f8910f01a1c8fe37ce0eb9"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/calibration_report.md",
+      "exists": true,
+      "size_bytes": 2077,
+      "sha256": "c1b6608f7c217d1fa5af0d2999eb2c93480a95abc8d2a69952417fe71e905f30"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/baseline_models_summary_unified.csv",
+      "exists": true,
+      "size_bytes": 329,
+      "sha256": "0858df37efb7b61fa1ae592da1fb50337edbaf25f19dbce40ef6b050c1d2c142"
+    },
+    {
+      "path": "D:/RAG_Projects/nano-graphrag/experiments/experiment1_complexity_classifier/outputs/snapshots/exp1_20250810_185822/routing_performance_curves.png",
+      "exists": true,
+      "size_bytes": 180860,
+      "sha256": "cff136c6f5a5f0cb0613e72cdeb95483e083cc2f16c062ca00e9172346ab52c1"
+    }
+  ],
+  "notes": "本快照聚合了阈值-覆盖-准确率权衡、校准对比与基线结果，用于后续实验对比与论文引用。"
+}

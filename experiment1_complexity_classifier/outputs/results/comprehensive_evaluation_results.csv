@@ -1,0 +1,10 @@
+Model,Type,Accuracy,Macro-F1,Micro-F1,ECE,MCE,Brier Score,Calibration Method
+random,baseline,0.3236,0.3219,0.3236,0.1981,0.963,0.7717,
+rule_based,baseline,0.4655,0.4718,0.4655,0.2722,0.4,0.7417,
+bert,baseline,0.8466,0.8421,0.8466,0.0743,0.1872,0.225,
+roberta,baseline,0.8466,0.8455,0.8466,0.0414,0.3875,0.2108,
+modernbert_uncalibrated,calibrated,0.8345,,,0.1021,0.3711,0.2447,uncalibrated
+modernbert_temperature_scaling,calibrated,0.8345,,,0.0447,0.4562,0.2144,temperature_scaling
+modernbert_tva_platt,calibrated,0.8345,,,0.0606,0.5233,0.2454,tva_platt
+modernbert_tva_isotonic,calibrated,0.8368,,,0.0402,0.5324,0.2432,tva_isotonic
+modernbert_tva_temperature,calibrated,0.8345,,,0.0607,0.5259,0.2448,tva_temperature

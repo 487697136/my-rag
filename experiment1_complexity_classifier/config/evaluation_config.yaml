@@ -1,0 +1,343 @@
+# 评估配置文件
+# Experiment 1: Evaluation Configuration
+
+# 核心评估指标配置
+core_metrics:
+  # ★★★ 顶级优先级指标
+  top_priority:
+    # 核心创新验证
+    ECE:
+      target: 0.08
+      description: "Expected Calibration Error - 温度缩放校准效果"
+      weight: 0.3
+      
+    # 基础性能验证  
+    classification_accuracy:
+      target: 0.85
+      description: "分类准确率 - ModernBERT有效性"
+      weight: 0.3
+      
+    # 系统可用性验证
+    route_accuracy:
+      target: 0.90
+      description: "路由准确率 - 系统实用性"
+      weight: 0.2
+  
+  # ★★ 高优先级指标
+  high_priority:
+    macro_f1:
+      target: 0.80
+      description: "宏平均F1分数"
+      weight: 0.1
+      
+    per_class_f1_variance:
+      target: 0.05
+      description: "各类别F1方差 (< 0.05)"
+      weight: 0.1
+
+# 详细评估指标配置
+detailed_metrics:
+  
+  # 分类性能指标
+  classification:
+    accuracy:
+      enabled: true
+      description: "整体分类准确率"
+      
+    macro_f1:
+      enabled: true
+      description: "宏平均F1分数"
+      
+    micro_f1:
+      enabled: true
+      description: "微平均F1分数"
+      
+    per_class_metrics:
+      enabled: true
+      classes: ["zero_hop", "one_hop", "multi_hop"]
+      metrics: ["precision", "recall", "f1_score", "support"]
+      
+    confusion_matrix:
+      enabled: true
+      normalize: "true"  # true, pred, all, None
+      save_figure: true
+  
+  # 校准质量指标
+  calibration:
+    ECE:
+      enabled: true
+      num_bins: 15
+      bin_strategy: "equal_width"
+      norm: "l1"
+      
+    MCE:
+      enabled: true
+      num_bins: 15
+      bin_strategy: "equal_width"
+      
+    brier_score:
+      enabled: true
+      
+    negative_log_likelihood:
+      enabled: true
+      
+    reliability_diagram_data:
+      enabled: true
+      num_bins: 15
+      
+    # 置信度分布分析
+    confidence_distribution:
+      enabled: true
+      bins: 20
+      per_class: true
+  
+  # 路由性能指标
+  routing:
+    route_accuracy:
+      enabled: true
+      description: "正确模式预测比例"
+      
+    optimal_coverage:
+      enabled: true
+      description: "选择最优检索模式的覆盖率"
+      
+    mode_distribution:
+      enabled: true
+      modes: ["llm_only", "naive", "local", "global"]
+      
+    threshold_analysis:
+      enabled: true
+      thresholds: [0.5, 0.6, 0.7, 0.8]
+      metrics: ["precision", "recall", "f1", "coverage"]
+
+# 对比实验配置
+comparison_experiments:
+  
+  # 基线模型对比
+  baseline_comparison:
+    models:
+      - "RandomClassifier"
+      - "RuleBasedClassifier" 
+      - "BertBaseUncalibrated"
+      - "RobertaLargeUncalibrated"
+      - "ModernBertUncalibrated"
+    
+    comparison_metrics:
+      - "accuracy"
+      - "macro_f1"
+      - "ECE"
+      - "MCE"
+  
+  # 校准方法对比
+  calibration_comparison:
+    methods:
+      - "uncalibrated"
+      - "temperature_scaling"
+      - "tva_platt"
+      - "tva_isotonic"
+      - "tva_temperature"
+    
+    comparison_metrics:
+      - "ECE"
+      - "MCE"
+      - "brier_score"
+      - "accuracy"
+      - "macro_f1"
+
+# 统计显著性检验
+statistical_tests:
+  
+  # 配对检验配置
+  paired_tests:
+    enabled: true
+    
+    # t检验
+    paired_t_test:
+      alpha: 0.05
+      alternative: "two-sided"  # two-sided, greater, less
+      
+    # Wilcoxon符号秩检验
+    wilcoxon_signed_rank:
+      alpha: 0.05
+      alternative: "two-sided"
+  
+  # 效应量计算
+  effect_size:
+    cohens_d:
+      enabled: true
+      target: 0.5  # 中等效应量
+      
+    cliff_delta:
+      enabled: true
+      
+  # Bootstrap置信区间
+  bootstrap_ci:
+    enabled: true
+    n_bootstrap: 1000
+    confidence_level: 0.95
+    random_state: 42
+
+# 可视化配置
+visualization:
+  
+  # 核心图表
+  core_figures:
+    # Figure 1: Reliability Curves (校准前后对比)
+    reliability_curves:
+      enabled: true
+      methods: ["uncalibrated", "temperature_scaling", "tva_platt", "tva_isotonic"]
+      figure_size: [12, 8]
+      save_formats: ["png", "pdf", "svg"]
+      dpi: 300
+      
+    # Figure 2: Performance vs Calibration散点图
+    performance_calibration_scatter:
+      enabled: true
+      x_axis: "ECE"
+      y_axis: "macro_f1"
+      figure_size: [10, 8]
+      
+    # Figure 3: 校准效果对比条形图
+    calibration_comparison_bar:
+      enabled: true
+      metrics: ["ECE", "MCE", "brier_score"]
+      figure_size: [12, 6]
+  
+  # 补充图表
+  supplementary_figures:
+    # 混淆矩阵热力图
+    confusion_matrices:
+      enabled: true
+      methods: ["best_baseline", "modernbert_uncalibrated", "modernbert_calibrated"]
+      
+    # 置信度分布直方图
+    confidence_histograms:
+      enabled: true
+      per_class: true
+      per_method: true
+      
+    # 路由性能曲线
+    routing_performance_curves:
+      enabled: true
+      x_axis: "threshold"
+      y_axes: ["precision", "recall", "f1", "coverage"]
+  
+  # 图表样式配置
+  styling:
+    color_palette: "colorbrewer"  # matplotlib, seaborn, colorbrewer
+    font_family: "Arial"
+    font_size: 12
+    figure_dpi: 300
+    save_transparent: false
+
+# 结果报告配置
+reporting:
+  
+  # 汇总表格
+  summary_tables:
+    # Table 1: 分类性能对比
+    classification_performance:
+      enabled: true
+      models: "all"
+      metrics: ["accuracy", "macro_f1", "per_class_f1", "ECE"]
+      format: "latex"  # latex, markdown, html
+      
+    # Table 2: 校准效果对比
+    calibration_effectiveness:
+      enabled: true
+      methods: "all"
+      metrics: ["ECE", "MCE", "brier_score", "ECE_improvement"]
+      highlight_best: true
+      
+    # Table 3: 统计显著性结果
+    statistical_significance:
+      enabled: true
+      comparisons: "all_pairs"
+      metrics: ["p_value", "cohens_d", "ci_lower", "ci_upper"]
+  
+  # 文本报告
+  text_report:
+    enabled: true
+    sections:
+      - "executive_summary"
+      - "method_comparison"
+      - "statistical_analysis"
+      - "recommendations"
+    
+    format: "markdown"
+    include_figures: true
+  
+  # 数值结果导出
+  numerical_results:
+    formats: ["json", "csv", "xlsx"]
+    precision: 4
+    include_metadata: true
+
+# 实验记录与追踪
+experiment_tracking:
+  
+  # 实验日志
+  logging:
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file: "outputs/logs/evaluation.log"
+    
+  # 结果版本控制
+  versioning:
+    enabled: true
+    auto_increment: true
+    include_timestamp: true
+    
+  # 实验元数据
+  metadata:
+    experiment_id: "exp1_complexity_classifier"
+    researcher: "auto"
+    institution: "research_team"
+    date: "auto"
+    
+    # 硬件信息
+    hardware_info:
+      gpu_model: "auto"
+      memory_gb: "auto"
+      cpu_cores: "auto"
+
+# 性能优化配置
+performance:
+  
+  # 批处理配置
+  batch_processing:
+    enabled: true
+    batch_size: 1000
+    
+  # 并行计算
+  parallel_processing:
+    enabled: true
+    n_jobs: -1  # 使用所有可用核心
+    
+  # 缓存配置
+  caching:
+    enabled: true
+    cache_dir: "outputs/cache/evaluation"
+    
+  # 内存管理
+  memory_management:
+    clear_cache_between_methods: true
+    garbage_collection: true
+
+# 错误处理与调试
+debugging:
+  
+  # 详细输出配置
+  verbose_output:
+    enabled: true
+    level: 1  # 0-3, 越高越详细
+    
+  # 中间结果保存
+  save_intermediate:
+    enabled: true
+    metrics_per_batch: true
+    
+  # 错误恢复
+  error_handling:
+    continue_on_error: true
+    save_partial_results: true

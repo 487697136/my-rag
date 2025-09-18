@@ -12,8 +12,6 @@ v0.2.0 整合版特性：
 - 统一融合接口：整合传统融合策略
 - 保持向后兼容性
 - 提供便捷的创建函数
-
-适合本科生研究项目和实际应用场景。
 """
 
 __version__ = "0.2.0"
@@ -71,13 +69,7 @@ from .complexity import (
 
 # ============= 增强功能模块 (整合版) =============
 
-# FiT5融合策略
-from .fusion import (
-    FiT5FusionEngine,
-    FiT5Config,
-    FusionResult,
-    create_fit5_fusion_engine
-)
+# FiT5融合策略已移除，使用RRF置信度感知融合
 
 
 
@@ -115,8 +107,7 @@ def create_evaluator(evaluator_type: str = "modern", **kwargs):
 # 检索结果对齐 (从实际实现的模块导入)
 from .retrieval.alignment import (
     RetrievalResult,
-    ScoreNormalizer,
-    RetrievalResultAdapter,
+    RetrievalAdapter,
 )
 
 # 工具函数
@@ -202,12 +193,6 @@ __all__ = [
     
     # ============= 增强功能 (整合版) =============
 
-    # FiT5融合策略
-    "FiT5FusionEngine",
-    "FiT5Config",
-    "FusionResult", 
-    "create_fit5_fusion_engine",
-    
     # 评估系统 (现代评估器)
     "ModernEvaluator",
     "ModernEvaluatorConfig", 
@@ -215,8 +200,7 @@ __all__ = [
     
     # 检索结果对齐 (已实现)
     "RetrievalResult",
-    "ScoreNormalizer", 
-    "RetrievalResultAdapter",
+    "RetrievalAdapter",
     
     # 混合检索功能已集成到其他模块中
     
@@ -272,22 +256,21 @@ def create_nano_graphrag(enhanced: bool = True, **kwargs):
     else:
         return create_basic_graphrag(**kwargs)
 
-def create_unified_pipeline(model_name: str = "t5-base", evaluator_type: str = "modern", **kwargs):
+def create_unified_pipeline(evaluator_type: str = "modern", **kwargs):
     """
-    创建统一的FiT5融合+评估管道
+    创建统一的RRF融合+评估管道
     
     Args:
-        model_name: FiT5模型名称
         evaluator_type: 评估器类型 ("modern", "comprehensive", "basic")
         **kwargs: 配置参数
         
     Returns:
         (fusion_engine, evaluator) 元组
     """
-    from .fusion import create_fit5_fusion_engine
+    from .retrieval import create_fusion_engine
     
-    # 创建FiT5融合引擎
-    fusion_engine = create_fit5_fusion_engine(model_name=model_name, **kwargs)
+    # 创建RRF融合引擎
+    fusion_engine = create_fusion_engine(**kwargs)
     
     # 创建评估器
     evaluator = create_evaluator(evaluator_type, **kwargs)
@@ -298,35 +281,33 @@ def get_available_fusion_types():
     """获取可用的融合类型"""
     available_types = []
     
-    # 检查FiT5融合是否可用
+    # 检查RRF融合是否可用
     try:
-        from .fusion import FiT5FusionEngine
-        available_types.append("fit5")
+        from .retrieval import ConfidenceAwareFusion
+        available_types.append("rrf")
     except ImportError:
         pass
     
     # 默认总是有简单的线性融合作为回退
-    if "fit5" not in available_types:
+    if "rrf" not in available_types:
         available_types.append("fallback")
     
     return available_types
 
 # 系统能力标志
-TRADITIONAL_FUSION_AVAILABLE = True  # 基础融合总是可用
-FIT5_FUSION_AVAILABLE = True  # FiT5融合已实现
+RRF_FUSION_AVAILABLE = True  # RRF融合总是可用
 BASIC_EVALUATION_AVAILABLE = True  # 基础评估可用
 
 def get_system_capabilities():
     """获取系统可用能力"""
     capabilities = {
         "fusion_types": get_available_fusion_types(),
-        "traditional_fusion_available": TRADITIONAL_FUSION_AVAILABLE,
-        "fit5_fusion_available": FIT5_FUSION_AVAILABLE,
+        "rrf_fusion_available": RRF_FUSION_AVAILABLE,
         "basic_evaluation_available": BASIC_EVALUATION_AVAILABLE,
         "enhanced_features": [
             "modern_evaluator", 
             "complexity_router",
-            "fit5_fusion",
+            "rrf_fusion",
             "retrieval_alignment"
         ]
     }
@@ -369,8 +350,8 @@ except Exception as e:
     logger.warning(f"Dependency check failed: {e}")
 
 # 显示欢迎信息
-logger.info(f"Nano GraphRAG v{__version__} (FiT5整合版) loaded successfully!")
-logger.info("🔧 核心特性: FiT5融合引擎, Modern Evaluator")
-logger.info("🚀 融合技术: 基于T5架构的智能文档重排序")
+logger.info(f"Nano GraphRAG v{__version__} (置信度感知融合版) loaded successfully!")
+logger.info("🔧 核心特性: RRF置信度感知融合, Modern Evaluator")
+logger.info("🚀 融合技术: 基于互惠排名融合的智能多源检索")
 logger.info("💡 快速开始: create_nano_graphrag() | 管道创建: create_unified_pipeline()")
 logger.info(f"📊 系统能力: {len(get_system_capabilities()['fusion_types'])} 种融合策略可用")

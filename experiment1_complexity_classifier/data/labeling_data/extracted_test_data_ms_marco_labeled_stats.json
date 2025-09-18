@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "total_samples": 9650,
+    "successful_samples": 9648,
+    "failed_samples": 2,
+    "success_rate": 0.9997927461139896,
+    "label_distribution": {
+      "one_hop": 5731,
+      "zero_hop": 3742,
+      "multi_hop": 147,
+      "to_review": 28
+    }
+  },
+  "timing": {
+    "start_time": "2025-08-06T19:26:35.971214",
+    "end_time": "2025-08-07T16:47:25.620050",
+    "total_batches": 965,
+    "completed_batches": 965
+  },
+  "configuration": {
+    "batch_size": 10,
+    "model": "qwen-turbo",
+    "self_consistency_enabled": true,
+    "consistency_samples": 3,
+    "consistency_threshold": 0.6
+  }
+}
